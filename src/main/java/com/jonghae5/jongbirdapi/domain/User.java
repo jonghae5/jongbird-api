@@ -1,24 +1,39 @@
 package com.jonghae5.jongbirdapi.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+@Getter
 public class User extends BaseTimeEntity{
 
     @Id @GeneratedValue
     private Long userId;
 
-    @NotBlank
+    @Column(nullable = false)
     private String email;
-    @NotBlank
+    @Column(nullable = false)
     private String nickname;
-    @NotBlank
+    @Column(nullable = false)
     private String password;
 
+//    @Builder.Default
+//    @OneToMany(mappedBy = "user")
+//    private List<Post> posts = new ArrayList<>();
+//    @Builder.Default
+//    @OneToMany(mappedBy = "following")
+//    private List<Follow> followings = new ArrayList<>();
+//    @Builder.Default
+//    @OneToMany(mappedBy = "follower")
+//    private List<Follow> followers = new ArrayList<>();
 }
