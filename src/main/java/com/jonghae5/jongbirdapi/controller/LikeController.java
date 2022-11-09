@@ -1,13 +1,12 @@
 package com.jonghae5.jongbirdapi.controller;
 
 
-import com.jonghae5.jongbirdapi.argumentResolver.Login;
+import com.jonghae5.jongbirdapi.web.argumentResolver.Login;
 import com.jonghae5.jongbirdapi.domain.User;
 import com.jonghae5.jongbirdapi.service.LikeService;
-import com.jonghae5.jongbirdapi.view.LikeResponse;
+import com.jonghae5.jongbirdapi.view.like.LikeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

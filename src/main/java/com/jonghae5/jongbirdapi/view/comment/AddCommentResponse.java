@@ -3,6 +3,7 @@ package com.jonghae5.jongbirdapi.view.comment;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jonghae5.jongbirdapi.domain.Comment;
 import com.jonghae5.jongbirdapi.domain.User;
+import com.jonghae5.jongbirdapi.view.dto.UserOnlyNickname;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -28,16 +29,6 @@ public class AddCommentResponse {
     @JsonProperty(value = "User")
     private UserOnlyNickname user;
 
-    @Data
-    static class UserOnlyNickname {
-        public UserOnlyNickname(Long id, String nickname) {
-            this.id = id;
-            this.nickname = nickname;
-        }
-
-        private Long id;
-        private String nickname;
-    }
 
     public void create(Comment comment , User user) {
         this.commentId = comment.getCommentId();

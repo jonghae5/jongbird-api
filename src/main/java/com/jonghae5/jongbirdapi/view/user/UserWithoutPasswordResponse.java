@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jonghae5.jongbirdapi.domain.Follow;
 import com.jonghae5.jongbirdapi.domain.Post;
 import com.jonghae5.jongbirdapi.domain.User;
+import com.jonghae5.jongbirdapi.view.dto.PostOnlyId;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -40,13 +41,5 @@ public class UserWithoutPasswordResponse {
 
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
-    }
-
-    @Data
-    static class PostOnlyId {
-        private Long id;
-        public PostOnlyId(Long id) {
-            this.id = id;
-        }
     }
 }

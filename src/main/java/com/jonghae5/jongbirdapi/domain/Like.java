@@ -1,5 +1,6 @@
 package com.jonghae5.jongbirdapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,10 +22,12 @@ public class Like extends BaseTimeEntity{
     @Id @GeneratedValue
     private Long likeId;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "POST_ID")
     private Post post;
@@ -36,9 +39,10 @@ public class Like extends BaseTimeEntity{
         post.getLikers().add(this);
     }
 
-    public void deleteUserAndPost(User user, Post post) {
+    public void deleteUserAndPost() {
+        this.post.getLikers().remove(this);
         this.user = null;
         this.post = null;
-        post.getLikers().remove(this);
+
     }
 }

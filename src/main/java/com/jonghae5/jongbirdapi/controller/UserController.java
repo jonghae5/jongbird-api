@@ -1,9 +1,11 @@
 package com.jonghae5.jongbirdapi.controller;
 
-import com.jonghae5.jongbirdapi.argumentResolver.Login;
+import com.jonghae5.jongbirdapi.web.argumentResolver.Login;
 import com.jonghae5.jongbirdapi.domain.User;
 import com.jonghae5.jongbirdapi.service.UserService;
-import com.jonghae5.jongbirdapi.session.SessionConst;
+import com.jonghae5.jongbirdapi.web.session.SessionConst;
+import com.jonghae5.jongbirdapi.view.user.ChangeNicknameRequest;
+import com.jonghae5.jongbirdapi.view.user.ChangeNicknameResponse;
 import com.jonghae5.jongbirdapi.view.user.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,12 +63,10 @@ public class UserController {
         return "로그아웃 완료";
     }
 
-
-    // TODO
-    // user/1/follow  > PATCH, DELETE >
-    // DELETE /user/follower/1
-    //GET /user/followers
-    //GET /user/followings
-    //POST /user/nickname
+    @PatchMapping("/nickname")
+    public ChangeNicknameResponse changeNickname(@Login User loginUser, @RequestBody @Valid ChangeNicknameRequest changeNicknameRequest) {
+        userService.changeNickname(loginUser, changeNicknameRequest.getNickname());
+        return new ChangeNicknameResponse(changeNicknameRequest.getNickname());
+    }
 
 }

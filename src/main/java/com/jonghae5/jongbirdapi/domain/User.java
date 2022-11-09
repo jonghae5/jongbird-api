@@ -36,4 +36,9 @@ public class User extends BaseTimeEntity{
 //    @Builder.Default
 //    @OneToMany(mappedBy = "follower")
 //    private List<Follow> followers = new ArrayList<>();
+
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }

@@ -53,6 +53,12 @@ public class TestInit {
             User user = userService.join(createUserRequest);
             userService.findUserWithoutPassword(user.getUserId());
 
+            CreateUserRequest createUserRequest2 = new CreateUserRequest();
+            createUserRequest2.setNickname("테스트2");
+            createUserRequest2.setEmail("wldwldl2368@gmail.com");
+            createUserRequest2.setPassword("skfgnxh1");
+            User user2 = userService.join(createUserRequest2);
+            userService.findUserWithoutPassword(user2.getUserId());
             log.info("테스트 유저 생성");
 
         }

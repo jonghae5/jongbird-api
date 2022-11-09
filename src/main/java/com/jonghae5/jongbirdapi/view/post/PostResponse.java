@@ -5,6 +5,9 @@ import com.jonghae5.jongbirdapi.domain.Comment;
 import com.jonghae5.jongbirdapi.domain.Image;
 import com.jonghae5.jongbirdapi.domain.Post;
 import com.jonghae5.jongbirdapi.domain.User;
+import com.jonghae5.jongbirdapi.view.dto.LikeOnlyId;
+import com.jonghae5.jongbirdapi.view.dto.RetweetPostWithUserAndImage;
+import com.jonghae5.jongbirdapi.view.dto.UserOnlyNickname;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,23 +24,21 @@ public class PostResponse {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Long userId;
+
     @JsonProperty(value = "User")
     private UserOnlyNickname user;
     @JsonProperty(value = "Comments")
     private List<Comment> comments;
-//    private Long RetweetId;
+
     @JsonProperty(value = "Images")
     private List<Image> images = new ArrayList<>();
-//    private User retweet;
+
     @JsonProperty(value = "Likers")
-    private List<LikerOnlyId> likers = new ArrayList<>();
+    private List<LikeOnlyId> likers = new ArrayList<>();
 
+    @JsonProperty(value = "Retweet")
+    private RetweetPostWithUserAndImage retweet;
 
-    static class UserForm {
-        private Long id;
-        private String nickname;
-    }
 
     public PostResponse(Post post) {
         this.id = post.getPostId();
@@ -45,37 +46,19 @@ public class PostResponse {
         this.createdAt = post.getCreatedAt();
         this.updatedAt = post.getUpdatedAt();
 
-        // 필요 없을 거 같음
-        this.userId = post.getUser().getUserId();
-        this.user = new UserOnlyNickname(post.getUser().getUserId(),post.getUser().getNickname());
+        this.user = new UserOnlyNickname(post.getUser());
         this.comments = post.getComments();
         this.images = post.getImages();
-//        this.likers = post.getLikers()
-//                .stream()
-//                .map(x -> new LikerOnlyId(x.getLikeId())).collect(Collectors.toList());
-        //        retweetId = retweetId;
+        this.likers = post.getLikers()
+                .stream()
+                .map(x -> new LikeOnlyId(x)).collect(Collectors.toList());
 
-        //TODO
-        // 이미지
-        // 리트윗 포스트
-//        this.retweet = retweet;
-    }
-
-    @Data
-    static class UserOnlyNickname {
-        public UserOnlyNickname(Long id, String nickname) {
-            this.id = id;
-            this.nickname = nickname;
-        }
-        private Long id;
-        private String nickname;
-    }
-
-    @Data
-    static class LikerOnlyId {
-        private Long id;
-        public LikerOnlyId(Long id) {
-            this.id = id;
+        if (post.getRetweet()!=null) {
+            this.retweet = new RetweetPostWithUserAndImage(post.getRetweet().getPost());
         }
     }
+
+
+
+
 }

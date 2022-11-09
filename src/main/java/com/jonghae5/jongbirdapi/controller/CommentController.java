@@ -1,6 +1,6 @@
 package com.jonghae5.jongbirdapi.controller;
 
-import com.jonghae5.jongbirdapi.argumentResolver.Login;
+import com.jonghae5.jongbirdapi.web.argumentResolver.Login;
 import com.jonghae5.jongbirdapi.domain.User;
 import com.jonghae5.jongbirdapi.service.CommentService;
 import com.jonghae5.jongbirdapi.view.comment.AddCommentRequest;
@@ -27,3 +27,6 @@ public class CommentController {
         return commentService.addComment(addCommentRequest, loginUser, postId);
     }
 }
+
+
+//좋아요 에러

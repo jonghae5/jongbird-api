@@ -1,10 +1,12 @@
 package com.jonghae5.jongbirdapi;
 
-import com.jonghae5.jongbirdapi.argumentResolver.LoginUserArgumentResolver;
+import com.jonghae5.jongbirdapi.web.argumentResolver.LoginUserArgumentResolver;
+import com.jonghae5.jongbirdapi.web.interceptor.LogInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -40,9 +42,16 @@ public class WebConfig implements WebMvcConfigurer {
 //        } else {
 
         registry.addResourceHandler("/images/**")
-            .addResourceLocations("file:/Users/ojh/jongbird-api/src/main/resources/static/images/");
+                .addResourceLocations("file:/Users/ojh/jongbird-api/src/main/resources/static/images/");
 //        }
 
     }
 
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LogInterceptor())
+                .order(1)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/css/**", "/fonts/**", "/images/**", "/js/**", "/template/**", "/*.ico", "/error", "/error-page", "/**/*.otf");
+    }
 }

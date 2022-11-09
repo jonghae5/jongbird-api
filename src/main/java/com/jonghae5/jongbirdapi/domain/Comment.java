@@ -1,5 +1,6 @@
 package com.jonghae5.jongbirdapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class Comment extends BaseTimeEntity{
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "POST_ID")
     private Post post;
@@ -33,5 +35,12 @@ public class Comment extends BaseTimeEntity{
         this.user = user;
         this.post = post;
         post.getComments().add(this);
+    }
+
+    public void deleteUserAndPost() {
+        this.post.getComments().remove(this);
+        this.user = null;
+        this.post = null;
+
     }
 }

@@ -3,7 +3,7 @@ package com.jonghae5.jongbirdapi.service;
 import com.jonghae5.jongbirdapi.domain.Follow;
 import com.jonghae5.jongbirdapi.domain.Post;
 import com.jonghae5.jongbirdapi.domain.User;
-import com.jonghae5.jongbirdapi.repository.FollowRepository;
+import com.jonghae5.jongbirdapi.repository.follow.FollowRepository;
 import com.jonghae5.jongbirdapi.repository.post.PostRepository;
 import com.jonghae5.jongbirdapi.repository.user.UserRepository;
 import com.jonghae5.jongbirdapi.view.user.CreateUserRequest;
@@ -71,11 +71,17 @@ public class UserService {
         List<Follow> followers = followRepository.findByFollower(user);
         List<Follow> followings = followRepository.findByFollowing(user);
 
-        //TODO
-        //모든 데이터 들고오기
         UserWithoutPasswordResponse userWithoutPasswordResponse = new UserWithoutPasswordResponse();
         userWithoutPasswordResponse.create(user, posts, followers, followings);
         return userWithoutPasswordResponse;
     }
 
+    public void changeNickname(User loginUser, String nickname) {
+        Optional<User> userDuplicatedNickname = userRepository.findByNickname(nickname);
+        if (userDuplicatedNickname.isPresent()) {
+            log.error("같은 닉네임을 가지고 있습니다.");
+        }
+        User findUser = userRepository.findById(loginUser.getUserId()).orElseThrow(IllegalStateException::new);
+        findUser.updateNickname(nickname);
+    }
 }

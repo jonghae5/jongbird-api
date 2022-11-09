@@ -20,7 +20,7 @@ public class Hashtag extends BaseTimeEntity{
     private Long hashtagId;
 
     @Column(nullable = false)
-    private String content;
+    private String name;
 
     @JsonIgnore
     @Builder.Default

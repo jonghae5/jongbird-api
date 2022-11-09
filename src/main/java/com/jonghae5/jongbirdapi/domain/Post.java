@@ -25,21 +25,23 @@ public class Post extends BaseTimeEntity{
     private String content;
 
 
+
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @JsonIgnore
+
     @Builder.Default
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
 //
-    @JsonIgnore
+
     @Builder.Default
     @OneToMany(mappedBy = "post")
     private List<Image> images = new ArrayList<>();
 
-    @JsonIgnore
+
     @Builder.Default
     @OneToMany(mappedBy = "post")
     private List<Like> likers = new ArrayList<>();
@@ -49,4 +51,12 @@ public class Post extends BaseTimeEntity{
     @OneToMany(mappedBy = "post")
     private List<PostHashtag> postHashtags = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "RETWEET_ID")
+    private Retweet retweet;
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }

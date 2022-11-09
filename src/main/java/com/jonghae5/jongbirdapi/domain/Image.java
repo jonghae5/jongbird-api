@@ -1,6 +1,7 @@
 package com.jonghae5.jongbirdapi.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class Image extends BaseTimeEntity{
     @Column(nullable = false)
     private String src;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "POST_ID")
     private Post post;
@@ -29,5 +31,10 @@ public class Image extends BaseTimeEntity{
     public void addPost(Post post) {
         this.post = post;
         post.getImages().add(this);
+    }
+
+    public void deletePost() {
+        this.post.getImages().remove(this);
+        this.post = null;
     }
 }

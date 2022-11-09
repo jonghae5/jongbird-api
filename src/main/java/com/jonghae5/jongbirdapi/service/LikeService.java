@@ -3,10 +3,10 @@ package com.jonghae5.jongbirdapi.service;
 import com.jonghae5.jongbirdapi.domain.Like;
 import com.jonghae5.jongbirdapi.domain.Post;
 import com.jonghae5.jongbirdapi.domain.User;
-import com.jonghae5.jongbirdapi.repository.LikeRepository;
+import com.jonghae5.jongbirdapi.repository.like.LikeRepository;
 import com.jonghae5.jongbirdapi.repository.post.PostRepository;
 import com.jonghae5.jongbirdapi.repository.user.UserRepository;
-import com.jonghae5.jongbirdapi.view.LikeResponse;
+import com.jonghae5.jongbirdapi.view.like.LikeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,8 +45,8 @@ public class LikeService {
         log.info("deleteLike Service Post & User 호출");
         Post post = postRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
         User user = userRepository.findById(loginUser.getUserId()).orElseThrow(IllegalArgumentException::new);
-        Like like = likeRepository.findByUserAndPost(user, post);
-        like.deleteUserAndPost(user, post);
+        Like like = likeRepository.findByUserAndPost(user, post).orElseThrow(IllegalArgumentException::new);
+        like.deleteUserAndPost();
         likeRepository.delete(like);
 
         LikeResponse likeResponse = LikeResponse.builder()
