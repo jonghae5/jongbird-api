@@ -2,6 +2,10 @@ package com.jonghae5.jongbirdapi.service;
 
 import com.jonghae5.jongbirdapi.domain.Follow;
 import com.jonghae5.jongbirdapi.domain.User;
+import com.jonghae5.jongbirdapi.exception.post.InvalidateFollowException;
+import com.jonghae5.jongbirdapi.exception.post.InvalidateUnFollowException;
+import com.jonghae5.jongbirdapi.exception.user.InvalidateUserBlockException;
+import com.jonghae5.jongbirdapi.exception.user.InvalidateUserException;
 import com.jonghae5.jongbirdapi.repository.follow.FollowRepository;
 import com.jonghae5.jongbirdapi.repository.user.UserRepository;
 import com.jonghae5.jongbirdapi.view.follow.FollowResponse;
@@ -25,7 +29,7 @@ public class FollowService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
     public FollowResponse addFollower(User loginUser, Long userId) {
-        User findUser = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
+        User findUser = userRepository.findById(userId).orElseThrow(InvalidateFollowException::new);
 
         Follow follow = Follow.builder()
                 .following(loginUser)
@@ -38,14 +42,14 @@ public class FollowService {
     }
 
     public FollowResponse deleteFollower(User loginUser, Long userId) {
-        User findUser = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
+        User findUser = userRepository.findById(userId).orElseThrow(InvalidateUnFollowException::new);
         followRepository.deleteByFollowingAndFollower(loginUser, findUser);
 
         return new FollowResponse(userId);
     }
 
     public FollowResponse deleteFollowing(User loginUser, Long userId) {
-        User findUser = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
+        User findUser = userRepository.findById(userId).orElseThrow(InvalidateUserBlockException::new);
         followRepository.deleteByFollowingAndFollower(loginUser, findUser);
 
         return new FollowResponse(userId);

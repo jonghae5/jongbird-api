@@ -1,5 +1,7 @@
 package com.jonghae5.jongbirdapi.controller;
 
+import com.jonghae5.jongbirdapi.view.result.ResponseService;
+import com.jonghae5.jongbirdapi.view.result.SingleResult;
 import com.jonghae5.jongbirdapi.web.argumentResolver.Login;
 import com.jonghae5.jongbirdapi.domain.User;
 import com.jonghae5.jongbirdapi.service.CommentService;
@@ -18,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private final CommentService commentService;
-
+    private final ResponseService responseService;
     @PostMapping("/post/{postId}/comment")
-    public AddCommentResponse addComment(@Login User loginUser,
-                                         @RequestBody AddCommentRequest addCommentRequest,
-                                         @PathVariable Long postId) {
+    public SingleResult<AddCommentResponse> addComment(@Login User loginUser,
+                                                       @RequestBody AddCommentRequest addCommentRequest,
+                                                       @PathVariable Long postId) {
 
-        return commentService.addComment(addCommentRequest, loginUser, postId);
+        return responseService.getSingleResult(commentService.addComment(addCommentRequest, loginUser, postId));
     }
 }
 

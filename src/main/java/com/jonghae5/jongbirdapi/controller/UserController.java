@@ -1,5 +1,7 @@
 package com.jonghae5.jongbirdapi.controller;
 
+import com.jonghae5.jongbirdapi.view.result.ResponseService;
+import com.jonghae5.jongbirdapi.view.result.SingleResult;
 import com.jonghae5.jongbirdapi.web.argumentResolver.Login;
 import com.jonghae5.jongbirdapi.domain.User;
 import com.jonghae5.jongbirdapi.service.UserService;
@@ -22,33 +24,34 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
+    private final ResponseService responseService;
     @GetMapping
-    public UserWithoutPasswordResponse getMyUser(@Login User loginUser) {
-        return userService.findUserWithoutPassword(loginUser.getUserId());
+    public SingleResult<UserWithoutPasswordResponse> getMyUser(@Login User loginUser) {
+        return responseService.getSingleResult(userService.findUserWithoutPassword(loginUser.getUserId()));
     }
 
     @GetMapping("/{userId}")
-    public UserWithoutPasswordResponse getOtherUser(@Login User loginUser, @PathVariable Long userId) {
-        return userService.findUserWithoutPassword(userId);
+    public SingleResult<UserWithoutPasswordResponse> getOtherUser(@Login User loginUser, @PathVariable Long userId) {
+        return responseService.getSingleResult(userService.findUserWithoutPassword(userId));
     }
 
     @PostMapping
-    public JoinUserResponse signUp(@RequestBody @Valid CreateUserRequest createUserRequest, HttpServletRequest request) {
+    public SingleResult<JoinUserResponse> signUp(@RequestBody @Valid CreateUserRequest createUserRequest, HttpServletRequest request) {
 
         User joinUser = userService.join(createUserRequest);
         HttpSession session = request.getSession();
 //        session.setAttribute(SessionConst.LOGIN_USER, joinUser);
-        return new JoinUserResponse(joinUser.getUserId());
+        return responseService.getSingleResult(new JoinUserResponse(joinUser.getUserId()));
     }
 
 
     @PostMapping("/login")
-    public UserWithoutPasswordResponse login(@RequestBody @Valid LoginUserRequest loginUserRequest,
+    public SingleResult<UserWithoutPasswordResponse> login(@RequestBody @Valid LoginUserRequest loginUserRequest,
                                   HttpSession session) {
         User loginUser = userService.login(loginUserRequest);
         session.setAttribute(SessionConst.LOGIN_USER, loginUser);
 
-        return userService.findUserWithoutPassword(loginUser.getUserId());
+        return responseService.getSingleResult(userService.findUserWithoutPassword(loginUser.getUserId()));
 
     }
 
@@ -64,9 +67,9 @@ public class UserController {
     }
 
     @PatchMapping("/nickname")
-    public ChangeNicknameResponse changeNickname(@Login User loginUser, @RequestBody @Valid ChangeNicknameRequest changeNicknameRequest) {
+    public SingleResult<ChangeNicknameResponse> changeNickname(@Login User loginUser, @RequestBody @Valid ChangeNicknameRequest changeNicknameRequest) {
         userService.changeNickname(loginUser, changeNicknameRequest.getNickname());
-        return new ChangeNicknameResponse(changeNicknameRequest.getNickname());
+        return responseService.getSingleResult(new ChangeNicknameResponse(changeNicknameRequest.getNickname()));
     }
 
 }

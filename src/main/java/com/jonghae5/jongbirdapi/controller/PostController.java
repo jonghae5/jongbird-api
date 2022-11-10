@@ -1,5 +1,7 @@
 package com.jonghae5.jongbirdapi.controller;
 
+import com.jonghae5.jongbirdapi.view.result.ResponseService;
+import com.jonghae5.jongbirdapi.view.result.SingleResult;
 import com.jonghae5.jongbirdapi.web.argumentResolver.Login;
 import com.jonghae5.jongbirdapi.domain.User;
 import com.jonghae5.jongbirdapi.service.PostService;
@@ -23,34 +25,34 @@ import java.io.IOException;
 public class PostController {
 
     private final PostService postService;
-
+    private final ResponseService responseService;
     @PostMapping
-    public AddPostResponse addPost(@RequestBody @Valid AddPostRequest addPostRequest,
-                                   @Login User loginUser) {
+    public SingleResult<AddPostResponse> addPost(@RequestBody @Valid AddPostRequest addPostRequest,
+                                                @Login User loginUser) {
 //        @RequestPart(value="imagePaths", required=false) List<String> imagePaths,
 //        @RequestPart(value="content") String content,
 
-        return postService.addPost(addPostRequest, loginUser);
+        return responseService.getSingleResult(postService.addPost(addPostRequest, loginUser));
     }
 
     @PostMapping("/upload/images")
-    public String addImages(@Login User loginUser, @RequestPart(value="image", required=false) MultipartFile image) throws IOException {
+    public SingleResult<String> addImages(@Login User loginUser, @RequestPart(value="image", required=false) MultipartFile image) throws IOException {
 
         //storeFilePath
-        return postService.addImage(image);
+        return responseService.getSingleResult(postService.addImage(image));
     }
 
     // PATCH /posts/10
     @PatchMapping("/{postId}")
-    public UpdatePostResponse updatePost(@Login User loginUser, @RequestBody @Valid UpdatePostRequest updatePostRequest, @PathVariable Long postId) {
+    public SingleResult<UpdatePostResponse> updatePost(@Login User loginUser, @RequestBody @Valid UpdatePostRequest updatePostRequest, @PathVariable Long postId) {
 
-        return postService.updatePost(updatePostRequest, loginUser);
+        return responseService.getSingleResult(postService.updatePost(updatePostRequest, loginUser));
     }
     // DELETE /post/10
     @DeleteMapping("/{postId}")
-    public DeletePostResponse deletePost(@Login User loginUser, @PathVariable Long postId) {
+    public SingleResult<DeletePostResponse> deletePost(@Login User loginUser, @PathVariable Long postId) {
 
-        return postService.deletePost(loginUser, postId);
+        return responseService.getSingleResult(postService.deletePost(loginUser, postId));
     }
 
 

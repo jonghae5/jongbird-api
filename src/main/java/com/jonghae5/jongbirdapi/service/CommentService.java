@@ -3,6 +3,8 @@ package com.jonghae5.jongbirdapi.service;
 import com.jonghae5.jongbirdapi.domain.Comment;
 import com.jonghae5.jongbirdapi.domain.Post;
 import com.jonghae5.jongbirdapi.domain.User;
+import com.jonghae5.jongbirdapi.exception.post.InvalidatePostException;
+import com.jonghae5.jongbirdapi.exception.user.InvalidateUserException;
 import com.jonghae5.jongbirdapi.repository.comment.CommentRepository;
 import com.jonghae5.jongbirdapi.repository.post.PostRepository;
 import com.jonghae5.jongbirdapi.repository.user.UserRepository;
@@ -25,8 +27,8 @@ public class CommentService {
     private final UserRepository userRepository;
     public AddCommentResponse addComment(AddCommentRequest addCommentRequest, User loginUser, Long postId) {
 
-        User user = userRepository.findById(loginUser.getUserId()).orElseThrow(IllegalArgumentException::new);
-        Post post = postRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
+        User user = userRepository.findById(loginUser.getUserId()).orElseThrow(InvalidateUserException::new);
+        Post post = postRepository.findById(postId).orElseThrow(InvalidatePostException::new);
         Comment comment = Comment.builder()
                 .content(addCommentRequest.getContent())
                 .build();

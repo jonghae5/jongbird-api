@@ -1,5 +1,7 @@
 package com.jonghae5.jongbirdapi.controller;
 
+import com.jonghae5.jongbirdapi.view.result.ResponseService;
+import com.jonghae5.jongbirdapi.view.result.SingleResult;
 import com.jonghae5.jongbirdapi.web.argumentResolver.Login;
 import com.jonghae5.jongbirdapi.domain.User;
 import com.jonghae5.jongbirdapi.service.HashtagService;
@@ -17,12 +19,13 @@ import java.util.List;
 public class HashtagController {
 
     private final HashtagService hashtagService;
+    private final ResponseService responseService;
     // GET /hashtag/리액트
     @GetMapping("/{hashtag}")
-    public List<GetPostWithHashtagResponse> getPostWithHashtag(@Login User loginUser,
-                                                               @PathVariable String hashtag,
-                                                               @RequestParam(defaultValue = "-1") Long lastId) {
+    public SingleResult<List<GetPostWithHashtagResponse>> getPostWithHashtag(@Login User loginUser,
+                                                                            @PathVariable String hashtag,
+                                                                            @RequestParam(defaultValue = "-1") Long lastId) {
 
-        return hashtagService.fetchPostPagesByHashtag(loginUser, hashtag, lastId);
+        return responseService.getSingleResult(hashtagService.fetchPostPagesByHashtag(loginUser, hashtag, lastId));
     }
 }

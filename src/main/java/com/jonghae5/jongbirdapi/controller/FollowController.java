@@ -1,6 +1,8 @@
 package com.jonghae5.jongbirdapi.controller;
 
 
+import com.jonghae5.jongbirdapi.view.result.ResponseService;
+import com.jonghae5.jongbirdapi.view.result.SingleResult;
 import com.jonghae5.jongbirdapi.web.argumentResolver.Login;
 import com.jonghae5.jongbirdapi.domain.User;
 import com.jonghae5.jongbirdapi.service.FollowService;
@@ -18,31 +20,32 @@ import org.springframework.web.bind.annotation.*;
 public class FollowController {
 
     private final FollowService followService;
-
+    private final ResponseService responseService;
 
     @PatchMapping("/{userId}/follow")
-    public FollowResponse addFollower(@Login User loginUser, @PathVariable Long userId) {
-        return followService.addFollower(loginUser, userId);
+    public SingleResult<FollowResponse> addFollower(@Login User loginUser, @PathVariable Long userId) {
+        return responseService.getSingleResult(followService.addFollower(loginUser, userId));
     }
 
     @DeleteMapping("/{userId}/follow")
-    public FollowResponse deleteFollower(@Login User loginUser, @PathVariable Long userId) {
-        return followService.deleteFollower(loginUser, userId);
+    public SingleResult<FollowResponse> deleteFollower(@Login User loginUser, @PathVariable Long userId) {
+        return responseService.getSingleResult(followService.deleteFollower(loginUser, userId));
     }
 
     @DeleteMapping("/follower/{userId}")
-    public FollowResponse deleteFollowing(@Login User loginUser, @PathVariable Long userId) {
-        return followService.deleteFollowing(loginUser, userId);
+    public SingleResult<FollowResponse> deleteFollowing(@Login User loginUser, @PathVariable Long userId) {
+        return responseService.getSingleResult(followService.deleteFollowing(loginUser, userId));
     }
 
+    //TODO
     @GetMapping("/followers")
-    public GetFollowersResponse getFollowers(@Login User loginUser, @RequestParam(defaultValue = "3") int limit) {
-        return followService.getFollowers(loginUser, limit);
+    public SingleResult<GetFollowersResponse> getFollowers(@Login User loginUser, @RequestParam(defaultValue = "3") int limit) {
+        return responseService.getSingleResult(followService.getFollowers(loginUser, limit));
 
     }
 
     @GetMapping("/followings")
-    public GetFollowingsResponse getFollowings(@Login User loginUser, @RequestParam(defaultValue = "3") int limit) {
-        return followService.getFollowings(loginUser, limit);
+    public SingleResult<GetFollowingsResponse> getFollowings(@Login User loginUser, @RequestParam(defaultValue = "3") int limit) {
+        return responseService.getSingleResult(followService.getFollowings(loginUser, limit));
     }
 }

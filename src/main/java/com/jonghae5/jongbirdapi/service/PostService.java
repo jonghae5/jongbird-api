@@ -1,6 +1,7 @@
 package com.jonghae5.jongbirdapi.service;
 
 import com.jonghae5.jongbirdapi.domain.*;
+import com.jonghae5.jongbirdapi.exception.post.InvalidatePostException;
 import com.jonghae5.jongbirdapi.web.file.FileStore;
 import com.jonghae5.jongbirdapi.web.file.ImageFile;
 import com.jonghae5.jongbirdapi.repository.comment.CommentRepository;
@@ -79,6 +80,8 @@ public class PostService {
         if (imagePaths != null) {
             for (String imagePath : imagePaths) {
                 //영속성 컨텍스트
+
+                //TODO 이미지
                 Image image = imageRepository.findBySrc(imagePath).orElseThrow(IllegalStateException::new);
                 image.addPost(post);
             }
@@ -131,7 +134,7 @@ public class PostService {
     public UpdatePostResponse updatePost(UpdatePostRequest updatePostRequest, User loginUser) {
         log.info("updatePost 실행");
         log.info("PostId={}",updatePostRequest.getPostId());
-        Post post = postRepository.findById(updatePostRequest.getPostId()).orElseThrow(IllegalStateException::new);
+        Post post = postRepository.findById(updatePostRequest.getPostId()).orElseThrow(InvalidatePostException::new);
         post.updateContent(updatePostRequest.getContent());
 
 
@@ -154,7 +157,7 @@ public class PostService {
 
     public DeletePostResponse deletePost(User loginUser, Long postId) {
 
-        Post post = postRepository.findById(postId).orElseThrow(IllegalStateException::new);
+        Post post = postRepository.findById(postId).orElseThrow(InvalidatePostException::new);
 
         List<Comment> comments = commentRepository.findByPost(post);
         for (Comment comment : comments) {

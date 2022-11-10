@@ -1,5 +1,7 @@
 package com.jonghae5.jongbirdapi.controller;
 
+import com.jonghae5.jongbirdapi.view.result.ResponseService;
+import com.jonghae5.jongbirdapi.view.result.SingleResult;
 import com.jonghae5.jongbirdapi.web.argumentResolver.Login;
 import com.jonghae5.jongbirdapi.domain.User;
 import com.jonghae5.jongbirdapi.service.RetweetService;
@@ -16,10 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class RetweetController {
 
     private final RetweetService retweetService;
+    private final ResponseService responseService;
     // POST /post/1/retweet
     @PostMapping("/post/{postId}/retweet")
-    public AddRetweetPostResponse addRetweet(@Login User loginUser, @PathVariable Long postId) {
+    public SingleResult<AddRetweetPostResponse> addRetweet(@Login User loginUser, @PathVariable Long postId) {
 
-        return retweetService.addRetweet(loginUser, postId);
+        return responseService.getSingleResult(retweetService.addRetweet(loginUser, postId));
     }
 }

@@ -3,6 +3,7 @@ package com.jonghae5.jongbirdapi.service;
 import com.jonghae5.jongbirdapi.domain.Hashtag;
 import com.jonghae5.jongbirdapi.domain.PostHashtag;
 import com.jonghae5.jongbirdapi.domain.User;
+import com.jonghae5.jongbirdapi.exception.hashtag.InvalidatePostWithHashtagException;
 import com.jonghae5.jongbirdapi.repository.posthashtag.PostHashtagQueryRepository;
 import com.jonghae5.jongbirdapi.repository.hashtag.HashtagRepository;
 import com.jonghae5.jongbirdapi.repository.posthashtag.PostHashtagRepository;
@@ -27,7 +28,7 @@ public class HashtagService {
 
     public List<GetPostWithHashtagResponse> fetchPostPagesByHashtag(User loginUser, String hashtag, Long lastId) {
         String replaceHashtagName = hashtag.replace("#", "").toLowerCase();
-        Hashtag findHashtag = hashtagRepository.findByName(replaceHashtagName).orElseThrow(IllegalArgumentException::new);
+        Hashtag findHashtag = hashtagRepository.findByName(replaceHashtagName).orElseThrow(InvalidatePostWithHashtagException::new);
 
         List<PostHashtag> findPostHashtags = fetchPagesByHashtag(findHashtag, replaceHashtagName, lastId);
 

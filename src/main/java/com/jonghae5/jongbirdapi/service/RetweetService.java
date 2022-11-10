@@ -3,6 +3,9 @@ package com.jonghae5.jongbirdapi.service;
 import com.jonghae5.jongbirdapi.domain.Post;
 import com.jonghae5.jongbirdapi.domain.Retweet;
 import com.jonghae5.jongbirdapi.domain.User;
+import com.jonghae5.jongbirdapi.exception.post.AlreadyRetweetPostException;
+import com.jonghae5.jongbirdapi.exception.post.InvalidateMyRetweetException;
+import com.jonghae5.jongbirdapi.exception.post.InvalidatePostException;
 import com.jonghae5.jongbirdapi.repository.retweet.RetweetRepository;
 import com.jonghae5.jongbirdapi.repository.post.PostRepository;
 import com.jonghae5.jongbirdapi.view.retweet.AddRetweetPostResponse;
@@ -23,14 +26,16 @@ public class RetweetService {
 
     public AddRetweetPostResponse addRetweet(User loginUser, Long postId) {
 
-        Post post = postRepository.findById(postId).orElseThrow(IllegalStateException::new);
+        Post post = postRepository.findById(postId).orElseThrow(InvalidatePostException::new);
 
         if (loginUser.getUserId() == post.getUser().getUserId()) {
             log.error("자신의 글은 리트윗할 수 없습니다.");
+            throw new InvalidateMyRetweetException();
         }
 
         if ((post.getRetweet()!=null)  && (post.getRetweet().getUser().getUserId() == loginUser.getUserId())) {
             log.error("자신이 리트윗한 글은 리트윗할 수 없습니다.");
+            throw new InvalidateMyRetweetException();
         }
 
         Long retweetPostTargetId = post.getPostId();
@@ -46,6 +51,7 @@ public class RetweetService {
         Optional<Retweet> findRetweetPost = retweetRepository.findByUserAndPost(loginUser,originalPost);
         if (findRetweetPost.isPresent()) {
             log.error("이미 리트윗한 게시글입니다.");
+            throw new AlreadyRetweetPostException();
         }
 
         Retweet newRetweet = Retweet.builder()

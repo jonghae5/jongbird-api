@@ -3,6 +3,7 @@ package com.jonghae5.jongbirdapi.service;
 import com.jonghae5.jongbirdapi.domain.Follow;
 import com.jonghae5.jongbirdapi.domain.Post;
 import com.jonghae5.jongbirdapi.domain.User;
+import com.jonghae5.jongbirdapi.exception.user.*;
 import com.jonghae5.jongbirdapi.repository.follow.FollowRepository;
 import com.jonghae5.jongbirdapi.repository.post.PostRepository;
 import com.jonghae5.jongbirdapi.repository.user.UserRepository;
@@ -11,6 +12,7 @@ import com.jonghae5.jongbirdapi.view.user.LoginUserRequest;
 import com.jonghae5.jongbirdapi.view.user.UserWithoutPasswordResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final FollowRepository followRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Transactional
@@ -35,12 +38,14 @@ public class UserService {
         log.info("signup={}", createUserRequest.getEmail());
         log.info("signup={}", createUserRequest.getNickname());
 
-        //TODO
+
+        //암호화
+        String encodePw = passwordEncoder.encode(createUserRequest.getPassword());
         // SECURITY 적용
         User newUser = User.builder()
                 .nickname(createUserRequest.getNickname())
                 .email(createUserRequest.getEmail())
-                .password(createUserRequest.getPassword()).build();
+                .password(encodePw).build();
 
         User saveUser = userRepository.save(newUser);
         return saveUser;
@@ -49,23 +54,29 @@ public class UserService {
     private void validateDuplicateEmail(String email) {
         Optional<User> findUser = userRepository.findByEmail(email);
         if (findUser.isPresent()) {
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+            throw new DuplicateIdException();
+
         }
     }
 
     public User login(LoginUserRequest loginUserRequest) {
-        User loginUser = userRepository.findByEmail(loginUserRequest.getEmail()).orElseThrow(IllegalStateException::new);
-//        if (loginUser.isEmpty()) {
-//            throw new IllegalStateException("존재하지 않는 회원입니다.");
-//        }
 
-        return loginUser;
+
+        User loginUser = userRepository.findByEmail(loginUserRequest.getEmail()).orElseThrow(InvalidateEmailException::new);
+        String encodePw = loginUser.getPassword();
+
+        if(passwordEncoder.matches(loginUserRequest.getPassword(), encodePw)) {
+            return loginUser;
+        } else {
+            throw new InvalidatePasswordException();
+        }
+
     }
 
     public UserWithoutPasswordResponse findUserWithoutPassword(Long userId) {
 
         // 없으면 nullPointException
-        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
+        User user = userRepository.findById(userId).orElseThrow(InvalidateUserException::new);
 
         List<Post> posts = postRepository.findByUser(user);
         List<Follow> followers = followRepository.findByFollower(user);
@@ -77,9 +88,12 @@ public class UserService {
     }
 
     public void changeNickname(User loginUser, String nickname) {
-        Optional<User> userDuplicatedNickname = userRepository.findByNickname(nickname);
-        if (userDuplicatedNickname.isPresent()) {
-            log.error("같은 닉네임을 가지고 있습니다.");
+        Optional<User> duplicatedUser = userRepository.findByNickname(nickname);
+        if (duplicatedUser.isPresent()) {
+            //TODO
+            if (!loginUser.getNickname().equals(duplicatedUser.get().getNickname())) {
+                throw new DuplicateNicknameException();
+            }
         }
         User findUser = userRepository.findById(loginUser.getUserId()).orElseThrow(IllegalStateException::new);
         findUser.updateNickname(nickname);
