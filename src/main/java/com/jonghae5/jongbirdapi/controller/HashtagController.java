@@ -1,6 +1,6 @@
 package com.jonghae5.jongbirdapi.controller;
 
-import com.jonghae5.jongbirdapi.view.result.ResponseService;
+import com.jonghae5.jongbirdapi.view.result.ResultService;
 import com.jonghae5.jongbirdapi.view.result.SingleResult;
 import com.jonghae5.jongbirdapi.web.argumentResolver.Login;
 import com.jonghae5.jongbirdapi.domain.User;
@@ -19,7 +19,7 @@ import java.util.List;
 public class HashtagController {
 
     private final HashtagService hashtagService;
-    private final ResponseService responseService;
+    private final ResultService responseService;
     // GET /hashtag/리액트
     @GetMapping("/{hashtag}")
     public SingleResult<List<GetPostWithHashtagResponse>> getPostWithHashtag(@Login User loginUser,

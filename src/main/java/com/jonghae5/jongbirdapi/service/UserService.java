@@ -87,7 +87,7 @@ public class UserService {
         return userWithoutPasswordResponse;
     }
 
-    public void changeNickname(User loginUser, String nickname) {
+    public User changeNickname(User loginUser, String nickname) {
         Optional<User> duplicatedUser = userRepository.findByNickname(nickname);
         if (duplicatedUser.isPresent()) {
             //TODO
@@ -97,5 +97,7 @@ public class UserService {
         }
         User findUser = userRepository.findById(loginUser.getUserId()).orElseThrow(IllegalStateException::new);
         findUser.updateNickname(nickname);
+
+        return findUser;
     }
 }

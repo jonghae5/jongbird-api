@@ -1,7 +1,7 @@
 package com.jonghae5.jongbirdapi.controller;
 
 
-import com.jonghae5.jongbirdapi.view.result.ResponseService;
+import com.jonghae5.jongbirdapi.view.result.ResultService;
 import com.jonghae5.jongbirdapi.view.result.SingleResult;
 import com.jonghae5.jongbirdapi.web.argumentResolver.Login;
 import com.jonghae5.jongbirdapi.domain.User;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class FollowController {
 
     private final FollowService followService;
-    private final ResponseService responseService;
+    private final ResultService responseService;
 
     @PatchMapping("/{userId}/follow")
     public SingleResult<FollowResponse> addFollower(@Login User loginUser, @PathVariable Long userId) {

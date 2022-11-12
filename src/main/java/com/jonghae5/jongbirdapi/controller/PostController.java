@@ -1,6 +1,6 @@
 package com.jonghae5.jongbirdapi.controller;
 
-import com.jonghae5.jongbirdapi.view.result.ResponseService;
+import com.jonghae5.jongbirdapi.view.result.ResultService;
 import com.jonghae5.jongbirdapi.view.result.SingleResult;
 import com.jonghae5.jongbirdapi.web.argumentResolver.Login;
 import com.jonghae5.jongbirdapi.domain.User;
@@ -25,7 +25,7 @@ import java.io.IOException;
 public class PostController {
 
     private final PostService postService;
-    private final ResponseService responseService;
+    private final ResultService responseService;
     @PostMapping
     public SingleResult<AddPostResponse> addPost(@RequestBody @Valid AddPostRequest addPostRequest,
                                                 @Login User loginUser) {

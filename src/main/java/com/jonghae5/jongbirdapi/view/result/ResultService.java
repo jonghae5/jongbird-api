@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class ResponseService {
+public class ResultService {
 
     public CommonResult getErrorResult(int code, String message) {
         CommonResult commonResult = new CommonResult();
@@ -29,7 +29,6 @@ public class ResponseService {
 
         return listResult;
     }
-
 
 
     void setSuccessResponse(CommonResult result) {

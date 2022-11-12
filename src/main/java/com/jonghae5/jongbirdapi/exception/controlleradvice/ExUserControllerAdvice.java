@@ -3,7 +3,7 @@ package com.jonghae5.jongbirdapi.exception.controlleradvice;
 import com.jonghae5.jongbirdapi.exception.Exception;
 import com.jonghae5.jongbirdapi.exception.user.*;
 import com.jonghae5.jongbirdapi.view.result.CommonResult;
-import com.jonghae5.jongbirdapi.view.result.ResponseService;
+import com.jonghae5.jongbirdapi.view.result.ResultService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExUserControllerAdvice {
 
 
-    private final ResponseService responseService;
+    private final ResultService responseService;
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
