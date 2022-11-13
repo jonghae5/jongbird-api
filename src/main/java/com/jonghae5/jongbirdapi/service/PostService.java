@@ -72,24 +72,19 @@ public class PostService {
         List<String> imagePaths = addPostRequest.getImagePaths();
         String content = addPostRequest.getContent();
 
-        Post post = Post.builder()
-                .content(content)
-                .user(user)
-                .build();
+        Post post = addPostRequest.toEntity(user);
 
         if (imagePaths != null) {
             for (String imagePath : imagePaths) {
                 //영속성 컨텍스트
-
                 //TODO 이미지
-                Image image = imageRepository.findBySrc(imagePath).orElseThrow(IllegalStateException::new);
+                Image image = imageRepository.findBySrc(imagePath).orElseThrow(IllegalArgumentException::new);
                 image.addPost(post);
             }
         }
         addHashtag(content, post);
 
         postRepository.save(post);
-
 
         AddPostResponse addPostResponse = new AddPostResponse();
         addPostResponse.create(post);
@@ -121,25 +116,25 @@ public class PostService {
         }
     }
 
-    public String addImage(MultipartFile image) throws IOException {
+    public ImageFile addImage(MultipartFile image) throws IOException {
         ImageFile imageFile = fileStore.storeFile(image);
         Image storeImage = Image.builder()
                 .src(imageFile.getStoreFilePath())
                 .build();
 
         imageRepository.save(storeImage);
-        return imageFile.getStoreFilePath();
+        return imageFile;
     }
 
     public UpdatePostResponse updatePost(UpdatePostRequest updatePostRequest, User loginUser) {
-        log.info("updatePost 실행");
-        log.info("PostId={}",updatePostRequest.getPostId());
+
         Post post = postRepository.findById(updatePostRequest.getPostId()).orElseThrow(InvalidatePostException::new);
         post.updateContent(updatePostRequest.getContent());
 
 
         // postHashtag 기존 데이터 삭제
-        List<PostHashtag> postHashtags = post.getPostHashtags();
+        List<PostHashtag> postHashtags = postHashtagRepository.findByPost(post);
+
         for (PostHashtag postHashtag : postHashtags) {
             postHashtag.deletePostAndHashtag();
             postHashtagRepository.delete(postHashtag);
@@ -151,8 +146,6 @@ public class PostService {
                 .postId(post.getPostId())
                 .content(post.getContent())
                 .build();
-
-
     }
 
     public DeletePostResponse deletePost(User loginUser, Long postId) {

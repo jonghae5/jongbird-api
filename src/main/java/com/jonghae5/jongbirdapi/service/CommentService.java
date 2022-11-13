@@ -29,15 +29,15 @@ public class CommentService {
 
         User user = userRepository.findById(loginUser.getUserId()).orElseThrow(InvalidateUserException::new);
         Post post = postRepository.findById(postId).orElseThrow(InvalidatePostException::new);
-        Comment comment = Comment.builder()
-                .content(addCommentRequest.getContent())
-                .build();
+
+        Comment comment = addCommentRequest.toEntity();
 
         comment.addUserAndPost(user, post);
         Comment saveComment = commentRepository.save(comment);
 
         AddCommentResponse addCommentResponse = AddCommentResponse.builder().build();
         addCommentResponse.create(saveComment, user);
+
         return addCommentResponse;
     }
 }

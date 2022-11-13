@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+import javax.management.loading.MLetContent;
+
 @AllArgsConstructor
 @Getter
 public enum Exception {
@@ -35,9 +37,11 @@ public enum Exception {
 
     INVALIDATE_PASSWORD(403, "비밀번호가 틀렸습니다."),
 
-    INVALIDATE_POST_WITH_HASHTAG(404, "해쉬태그에 맞는 게시글이 없습니다.");
+    INVALIDATE_POST_WITH_HASHTAG(404, "해쉬태그에 맞는 게시글이 없습니다."),
 
+    INVALIDATE_FOLLOW_EXIST(403, "이미 팔로우 데이터가 존재합니다."),
 
+    INVALIDATE_FOLLOW_UNEXIST(404, "팔로우 데이터가 존재하지 않습니다.");
     private final int code;
     private final String message;
 

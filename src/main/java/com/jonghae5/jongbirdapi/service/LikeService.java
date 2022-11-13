@@ -29,17 +29,15 @@ public class LikeService {
         log.info("addLike Service User 호출");
         User user = userRepository.findById(loginUser.getUserId()).orElseThrow(InvalidateUserException::new);
 
-        log.info("user Nickname={}", user.getNickname());
-        log.info("post content={}", post.getContent());
         Like like = Like.builder().build();
         like.addUserAndPost(user, post);
+
         Like saveLike = likeRepository.save(like);
 
-        LikeResponse likeResponse = LikeResponse.builder()
+        return LikeResponse.builder()
                 .postId(post.getPostId())
                 .userId(user.getUserId())
                 .build();
-        return likeResponse;
 
     }
 

@@ -2,6 +2,8 @@ package com.jonghae5.jongbirdapi.exception.controlleradvice;
 
 import com.jonghae5.jongbirdapi.exception.Exception;
 import com.jonghae5.jongbirdapi.exception.post.*;
+import com.jonghae5.jongbirdapi.exception.user.InvalidateFollowException;
+import com.jonghae5.jongbirdapi.exception.user.InvalidateUnFollowException;
 import com.jonghae5.jongbirdapi.view.result.CommonResult;
 import com.jonghae5.jongbirdapi.view.result.ResultService;
 import lombok.RequiredArgsConstructor;
@@ -31,19 +33,6 @@ public class ExPostControllerAdvice {
         return responseService.getErrorResult(Exception.INVALIDATE_MY_RETWEET.getCode(), Exception.INVALIDATE_MY_RETWEET.getMessage());
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public CommonResult handleFollowtEx(InvalidateFollowException e) {
-        log.info(e.getMessage());
-        return responseService.getErrorResult(Exception.INVALIDATE_FOLLOW.getCode(), Exception.INVALIDATE_FOLLOW.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public CommonResult handleUnFollowtEx(InvalidateUnFollowException e) {
-        log.info(e.getMessage());
-        return responseService.getErrorResult(Exception.INVALIDATE_UNFOLLOW.getCode(), Exception.INVALIDATE_UNFOLLOW.getMessage());
-    }
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public CommonResult handlePostEx(InvalidatePostException e) {

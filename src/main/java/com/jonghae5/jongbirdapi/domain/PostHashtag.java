@@ -35,10 +35,11 @@ public class PostHashtag extends BaseTimeEntity{
     }
 
     public void deletePostAndHashtag() {
-        this.post = null;
-        this.hashtag = null;
         post.getPostHashtags().remove(this);
         hashtag.getPostHashtags().remove(this);
+        this.post = null;
+        this.hashtag = null;
+
     }
 }
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, Long> {
@@ -21,4 +22,6 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     List<Follow> findByFollower(User user, Pageable pageable);
     List<Follow> findByFollowing(User user, Pageable pageable);
+
+    Optional<Follow> findByFollowingAndFollower(User followingUser, User followerUser);
 }
