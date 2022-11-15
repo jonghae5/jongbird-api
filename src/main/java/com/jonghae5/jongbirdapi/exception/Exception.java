@@ -41,7 +41,7 @@ public enum Exception {
 
     INVALIDATE_FOLLOW_EXIST(403, "이미 팔로우 데이터가 존재합니다."),
 
-    INVALIDATE_FOLLOW_UNEXIST(404, "팔로우 데이터가 존재하지 않습니다.");
+    INVALIDATE_FOLLOW_UN_EXIST(404, "팔로우 데이터가 존재하지 않습니다.");
     private final int code;
     private final String message;
 

@@ -62,6 +62,7 @@ public class PostService {
             return postQueryRepository.findByPostIdLessThanOrderByCreatedAtDesc(lastPostId, size);
         } else {
             return postQueryRepository.findAllOrderByCreatedAtDesc(size);
+
         }
 //        PageRequest pageRequest = PageRequest.of(0, size);
 //        List<Post> posts = postRepository.findByPostIdLessThanOrderByCreatedAtDesc(lastPostId, pageRequest);

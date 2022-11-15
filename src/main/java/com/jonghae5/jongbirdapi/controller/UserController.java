@@ -25,6 +25,8 @@ public class UserController {
 
     private final UserService userService;
     private final ResultService responseService;
+
+    //TODO 변경사항
     @GetMapping
     public SingleResult<UserWithoutPasswordResponse> getMyUser(@Login User loginUser) {
         return responseService.getSingleResult(userService.findUserWithoutPassword(loginUser.getUserId()));
@@ -68,8 +70,8 @@ public class UserController {
 
     @PatchMapping("/nickname")
     public SingleResult<ChangeNicknameResponse> changeNickname(@Login User loginUser, @RequestBody @Valid ChangeNicknameRequest changeNicknameRequest) {
-        userService.changeNickname(loginUser, changeNicknameRequest.getNickname());
-        return responseService.getSingleResult(new ChangeNicknameResponse(changeNicknameRequest.getNickname()));
+
+        return responseService.getSingleResult(userService.changeNickname(loginUser, changeNicknameRequest.getNickname()));
     }
 
 }

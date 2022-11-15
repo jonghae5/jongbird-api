@@ -90,17 +90,19 @@ public class ExUserControllerAdvice {
         return responseService.getErrorResult(Exception.INVALIDATE_UNFOLLOW.getCode(), Exception.INVALIDATE_UNFOLLOW.getMessage());
     }
 
+    //TODO
+    //에러수정
     @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public CommonResult handleFollowExistEx(InvalidateUnFollowException e) {
+    public CommonResult handleFollowExistEx(InvalidateFollowExistException e) {
         log.info(e.getMessage());
         return responseService.getErrorResult(Exception.INVALIDATE_FOLLOW_EXIST.getCode(), Exception.INVALIDATE_FOLLOW_EXIST.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public CommonResult handleFollowUnExistEx(InvalidateUnFollowException e) {
+    public CommonResult handleFollowUnExistEx(InvalidateFollowUnExistException e) {
         log.info(e.getMessage());
-        return responseService.getErrorResult(Exception.INVALIDATE_FOLLOW_UNEXIST.getCode(), Exception.INVALIDATE_FOLLOW_UNEXIST.getMessage());
+        return responseService.getErrorResult(Exception.INVALIDATE_FOLLOW_UN_EXIST.getCode(), Exception.INVALIDATE_FOLLOW_UN_EXIST.getMessage());
     }
 }

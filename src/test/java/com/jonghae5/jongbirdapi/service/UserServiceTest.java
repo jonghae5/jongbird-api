@@ -7,6 +7,7 @@ import com.jonghae5.jongbirdapi.exception.user.DuplicateNicknameException;
 import com.jonghae5.jongbirdapi.exception.user.InvalidateEmailException;
 import com.jonghae5.jongbirdapi.exception.user.InvalidatePasswordException;
 import com.jonghae5.jongbirdapi.repository.user.UserRepository;
+import com.jonghae5.jongbirdapi.view.user.ChangeNicknameResponse;
 import com.jonghae5.jongbirdapi.view.user.CreateUserRequest;
 import com.jonghae5.jongbirdapi.view.user.LoginUserRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -159,9 +160,9 @@ class UserServiceTest {
             when(userRepository.findByNickname(any())).thenReturn(Optional.ofNullable(null));
             when(userRepository.findById(user.getUserId())).thenReturn(Optional.ofNullable(user));
             //when
-            User findUser = userService.changeNickname(user, "newNickname");
+            ChangeNicknameResponse changeNicknameResponse = userService.changeNickname(user, "newNickname");
             //then
-            assertEquals("newNickname", findUser.getNickname());
+            assertEquals("newNickname", changeNicknameResponse.getNickname());
         }
 
         @Test

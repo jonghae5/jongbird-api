@@ -36,7 +36,7 @@ public class PostController {
     }
 
     @PostMapping("/upload/images")
-    public SingleResult<String> addImages(@Login User loginUser, @RequestPart(value="image", required=false) MultipartFile image) throws IOException {
+    public SingleResult<String> addImage(@Login User loginUser, @RequestPart(value="image", required=false) MultipartFile image) throws IOException {
 
         //storeFilePath
         return responseService.getSingleResult(postService.addImage(image).getStoreFilePath());

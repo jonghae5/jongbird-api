@@ -7,6 +7,7 @@ import com.jonghae5.jongbirdapi.exception.user.*;
 import com.jonghae5.jongbirdapi.repository.follow.FollowRepository;
 import com.jonghae5.jongbirdapi.repository.post.PostRepository;
 import com.jonghae5.jongbirdapi.repository.user.UserRepository;
+import com.jonghae5.jongbirdapi.view.user.ChangeNicknameResponse;
 import com.jonghae5.jongbirdapi.view.user.CreateUserRequest;
 import com.jonghae5.jongbirdapi.view.user.LoginUserRequest;
 import com.jonghae5.jongbirdapi.view.user.UserWithoutPasswordResponse;
@@ -87,7 +88,7 @@ public class UserService {
         return userWithoutPasswordResponse;
     }
 
-    public User changeNickname(User loginUser, String nickname) {
+    public ChangeNicknameResponse changeNickname(User loginUser, String nickname) {
         Optional<User> duplicatedUser = userRepository.findByNickname(nickname);
         if (duplicatedUser.isPresent()) {
             //TODO
@@ -98,6 +99,7 @@ public class UserService {
         User findUser = userRepository.findById(loginUser.getUserId()).orElseThrow(IllegalStateException::new);
         findUser.updateNickname(nickname);
 
-        return findUser;
+        return new ChangeNicknameResponse(findUser.getNickname());
+
     }
 }
